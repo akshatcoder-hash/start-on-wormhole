@@ -7,7 +7,7 @@ export default defineConfig({
     starlight({
       title: 'Start on Wormhole',
       social: {
-        github: 'https://github.com/withastro/starlight',
+        github: 'https://github.com/akshatcoder-hash/start-on-wormhole',
       },
       sidebar: [
         {
