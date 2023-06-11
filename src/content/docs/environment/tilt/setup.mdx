@@ -1,0 +1,95 @@
+---
+title: Tilt in Action
+description: Setting up Tilt
+---
+
+## Setting up Tilt:
+
+
+### On MacOS-
+
+1. **Install [Homebrew](https://brew.sh)**: 
+
+ Head over to your terminal and paste this-
+ 
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+2. Install [Go](https://go.dev/doc/install):
+
+```sh
+brew install go
+```
+
+3. Install [Docker](https://docs.docker.com/desktop/install/mac-install/):
+
+```sh
+brew install docker
+```
+
+4. Install [Tilt](https://docs.tilt.dev/install.html):
+
+```sh
+brew install tilt
+```
+
+5. Clone the [Wormhole Repository](https://github.com/wormhole-foundation/wormhole.git) and start Tilt:
+
+```sh
+git clone --branch main https://github.com/wormhole-foundation/wormhole.git
+
+cd wormhole/
+
+tilt up
+```
+
+![[Pasted image 20230610195616.png]]
+
+### On Linux and Windows:
+
+1. If you are using Windows, we recommend to start by downloading [WSL(Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install).
+2. Install [Go](https://go.dev/doc/install):
+
+```sh
+wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz
+```
+
+3. Install [Docker](https://docs.docker.com/engine/install/ubuntu/#installation-methods)
+	1. If you have installed Docker Desktop, Enable Kubernetes by going into Settings > Kubernetes.
+	2. If you have not installed Docker Desktop, Install [minikube](https://minikube.sigs.k8s.io/docs/start/). 
+		1. Configure Minikube: ```
+
+```bash
+minikube start --driver=docker --kubernetes-version=v1.23.3 --cpus=4 --memory=14G --disk-size=10G --namespace=wormhole
+```
+
+4. Install Tilt using terminal:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+```
+
+5. Clone the [Wormhole Repository](https://github.com/wormhole-foundation/wormhole.git) and start Tilt:
+
+```sh
+git clone --branch main https://github.com/wormhole-foundation/wormhole.git
+
+cd wormhole/
+
+tilt up
+```
+
+
+If everything has been good so far, you will be able to access the Tilt UI at http://localhost:10350/
+
+![Tilt UI](https://i.ibb.co/YLmHyjM/image.png)
+
+### Stop Tilt:
+
+To stop Tilt, simply run:
+
+```bash
+tilt down
+```
