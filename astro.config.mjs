@@ -24,8 +24,13 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
+          label: 'Setting up Development Environment',
+          items: [
+            { label: 'Developer Environment', link: '/environment/environment' },
+            { label: 'What is Tilt?', link: '/environment/tilt/what' },
+            { label: 'Setting up Tilt', link: '/environment/tilt/setup' },
+            { label: 'Resolving Errors', link: '/environment/tilt/errors' },
+          ],
         },
       ],
     }),
