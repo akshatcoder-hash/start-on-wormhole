@@ -1,0 +1,22 @@
+---
+title: Resolving Errors
+description: Troubleshooting
+---
+
+
+#### Where are Fantom/Celo/Polygon/other EVM chains?
+
+For all chains that support EVM, the smart contract development environment is effectively the same. For changes in gas costs and transaction times, consider testing contract logic on devnet and then using testnet environments to get chain-specific answers.
+
+#### Solana is taking forever
+
+Due to Solana's architecture, it often takes 25-40min to build the Solana pod. Consider increasing CPU cores assigned to devnet for a faster build.
+
+#### Solana program deploy doesn't work
+
+Kubernetes doesn't currently allow port forwarding for UDP ports, which is what Solana uses for `solana program deploy`. Instead, we recommend using [Solana Deployer](https://github.com/acheroncrypto/solana-deployer). Not only does this deploy programs over regular RPC (thus bypassing UDP port requirements), it's also much faster than `solana program deploy`.
+
+#### Reset state for a pod
+
+If you want to quickly iterate and don't want to bring Tilt down and back up, you can reset state for a pod by clicking the 🔄 button next to the pod name in Tilt UI.
+
