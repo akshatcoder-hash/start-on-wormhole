@@ -1,0 +1,26 @@
+---
+title: "How the Bridging Works?"
+description: "A high level overview of how Wormhole bridges assets"
+---
+
+# How the Bridging Works Behind the Scenes?
+
+Wormhole utilizes two processes, called "Attest" and "Transfer," to bridge tokens between different blockchains. These processes are essential for transferring tokens smoothly while maintaining their properties and capabilities. Let's explore each process in a straightforward manner to understand how Wormhole achieves seamless token bridging.
+
+## Attestation
+
+- Attestation is the initial step in the Wormhole Token Bridge process, where a token is "registered" with the bridge for transfer.
+- Tokens that are to be transferred must first go through the attestation process on their native chain (Origin Chain).
+- During attestation, the necessary addresses and metadata are created on the Origin Chain to allow the token to exist on foreign chains (Foreign Chain).
+- This step ensures that the wrapped asset, representing the token on the Foreign Chain, can be created and associated with the native token.
+
+![Attestation](https://i.ibb.co/YbvxVRF/attest.png)
+
+## Transfer
+
+ - Once attested, the tokens are ready to be mapped from their native chain to "wrapped" assets on the Foreign Chain.
+ - Transferring a token involves converting it into a wrapped asset on the Foreign Chain, which mirrors the native token's value and properties.
+ - For example, if you transfer an Ethereum-native token to Solana, a wrapped asset representing that token will be created on the Solana network.
+ - This wrapped asset holds the same value and characteristics as the native token on the Origin Chain, enabling seamless cross-chain transfer.
+
+ ![Transfer](https://i.ibb.co/PG7RZgK/transfer.png)
