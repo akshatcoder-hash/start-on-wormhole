@@ -11,10 +11,16 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: 'Guides',
+          label: 'Introduction to Wormhole',
           items: [
             // Each item here is one entry in the navigation menu.
-            { label: 'Example Guide', link: '/guides/example/' },
+            { label: 'Wormhole 101', link: '/introduction/wormhole101' },
+            { label: 'Evolution of Cross Network Communication', link: '/introduction/evolution' },
+            { label: 'Understanting Wormhole', link: '/introduction/understanding' },
+            { label: 'Why Wormhole', link: '/introduction/why' },
+            { label: 'Terminology', link: '/introduction/terminology' },
+            { label: 'How Bridging Works?', link: '/introduction/bridging' },
+            { label: 'Architecture', link: '/introduction/architecture' },
           ],
         },
         {
