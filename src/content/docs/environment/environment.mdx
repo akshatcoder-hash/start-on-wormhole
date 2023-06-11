@@ -1,0 +1,30 @@
+---
+title: Local Development Environment
+description: Types of local development environments for Wormhole
+---
+
+## Environment Setup
+
+At the minimum, you'll need a single blockchain node and a Wormhole Guardian node to get started with Wormhole development. However, as your cross-chain application becomes more sophisticated, you'll likely require additional components, such as relayers, frontends, automated tests, databases, explorers, and even integration with other blockchains.
+
+## Development Environment Options
+
+![Environment](https://i.ibb.co/bdqXYqc/image.png)
+
+We'll now explore three development environments in detail:
+
+1. **Wormhole Local Validator**: This is a simple custom environment where you bring your own blockchain. You can run local validator nodes and connect them to a single Guardian running on Docker. Initial setup may take time, but subsequent startup and shutdown should be quick. This environment requires local installation of validator node software.
+
+2. **Tilt**: Tilt is a comprehensive Kubernetes deployment of all the chains connected to Wormhole, including a Guardian node. It takes some time to fully spin up but provides a ready-to-use environment with all chains running out of the box.
+
+3. **Testnet**: If you want to test your application on various test and development networks of connected chains, you can utilize a single Guardian node dedicated to monitoring transactions on these networks. Contracts and RPC configurations for testnets can be found in the provided section. Note that testnets have limited Guardian nodes, so processing times may vary compared to the mainnet.
+
+
+Deployment to Public Networks:
+
+- **Testnet**: For testing purposes, you can deploy your application on the testnets and devnets of connected chains. The provided section contains the necessary contracts and RPC configurations. Please note that the limited number of Guardian nodes on testnets may affect VAA processing times.
+
+- **Mainnet**: When you're ready to deploy your application to the mainnet, you can find the mainnet contracts in the provided section.
+
+
+In the following sections, we'll delve into these development environments in more detail, along with additional tools that will aid your xDapp development journey. Before building an xDapp project, we'll guide you through choosing a suitable local environment, whether it's Wormhole Local Validator or Tilt.
