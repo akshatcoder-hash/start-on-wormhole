@@ -1,0 +1,36 @@
+---
+title: "Architecture of Wormhole"
+description: "A High Level Overview"
+---
+
+# Architecture
+
+Here’s an overview image of the architecture of Wormhole. It is divided into On-Chain and Off-Chain components. Let’s get a quick overview of each of them here and then we will also talk about them in detail.
+
+![Wormhole Architecture](https://i.ibb.co/9wqvCyf/image.png)
+
+
+## On-Chain Components:
+
+1. **xDapp Contracts**: These are the core Wormhole contracts. They receive transactions from the user’s end and interact with other xDapps and other **Ecosystem Contracts** to provide service.
+2. **Ecosystem Contracts:** Ecosystem Contracts within Wormhole serve the purpose of providing a comprehensive set of features to xDapp developers. These contracts are governed by Wormhole and are an integral part of the Wormhole Ecosystem. They enable the seamless integration of Wormhole's functionalities into xDapps.
+    - **Core Contracts**: Core Contracts form the foundation of the Wormhole ecosystem. These contracts are observed by Guardians and serve as the fundamental building blocks for cross-chain communication. They play a vital role in facilitating interoperability between different blockchains within the Wormhole network.
+    - **Relay Contracts:** (currently under development) These are contracts that will empower xDapps to send messages to specific blockchains through the decentralized Generic Relayer network. These contracts will enhance the communication capabilities of xDapps across different chains.
+    - **Gas Oracles**: The Gas Oracle, also in development, will serve as an oracle providing recommended fair gas prices across the Wormhole ecosystem. It will help ensure that transactions within the network are processed efficiently and at reasonable costs.
+    - **Worm Router Contracts:** Worm Router Contracts, also currently being developed, will enable developers to transform their Dapps into xDapps. By utilizing these contracts, Dapps can be accessed and interacted with by users on any blockchain supported by Wormhole, purely through client-side code. This promotes cross-chain compatibility and expands the user base of Dapps.
+
+
+![Components](https://i.ibb.co/XVcqv9J/image.png)
+
+## Off-Chain Components:
+
+1. **Guardian Network**: The Guardian Network consists of validators that observe the Core Contracts on supported chains. They generate VAAs (Verified Action Authority) as signed messages when these contracts receive interactions. Guardians ensure accurate cross-chain communication and enhance the security of the Wormhole ecosystem.
+   
+   ![Guardians](https://i.ibb.co/mFDTTGf/image.png)
+   
+2. **Guardian**: A Guardian is one of the validators in the Guardian Network, playing a role in the VAA (Verified Action Authority) multisig. They contribute to the collective decision-making process to ensure secure cross-chain communication within the Wormhole ecosystem.
+3. **Spy**: Within the Guardian Network, spies are validators who are not part of the Guardian set. Their role is to observe and forward network traffic, contributing to the scalability of VAA distribution and enhancing the efficiency of cross-chain communication.
+4. **VAAs**: Verifiable Action Approvals (VAAs) are essential data structures within the Wormhole ecosystem. They contain messages emitted by xDapps and include information about the emitting contract. VAAs are signed by the Guardians and require 13 out of 19 signatures to be considered valid and authentic.
+5. **Specialized Relayers:** These relayers are specifically designed to handle VAAs for a particular protocol or xDapp. They execute custom logic off-chain, which can reduce gas costs and enhance cross-chain compatibility. Currently, it is the responsibility of xDapp developers to develop and host specialized relayers.
+6. **Generic Relayers**: (in development) - The Wormhole ecosystem is working on a decentralized relayer network known as Generic Relayers. These relayers will facilitate the delivery of on-chain requested messages through the Wormhole Relay Contract, further enhancing the interoperability of different chains.
+7. **Wormchain**: (in development) - Wormchain is a dedicated cosmos blockchain that is being developed to support the Guardian Network. It serves as a purpose-built platform that aids in the interaction and coordination of the Guardians, enabling seamless cross-chain communication and secure operations within the Wormhole ecosystem.
