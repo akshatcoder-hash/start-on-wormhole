@@ -32,6 +32,16 @@ export default defineConfig({
             { label: 'Resolving Errors', link: '/environment/tilt/errors' },
           ],
         },
+        {
+          label: 'Creating a Token Bridge',
+          items: [
+            { label: 'Token Bridges', link: '/wh-connect/bridges' },
+            { label: 'Initialise the Bridge App', link: '/wh-connect/initialise' },
+            { label: 'Integrating Wormhole Connect', link: '/wh-connect/integrate' },
+            { label: 'Bridging Tokens', link: '/wh-connect/bridging' },
+            { label: 'Customising the Bridge', link: '/wh-connect/customise' },
+          ],
+        },
       ],
     }),
   ],
