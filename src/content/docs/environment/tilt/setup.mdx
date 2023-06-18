@@ -44,7 +44,6 @@ cd wormhole/
 tilt up
 ```
 
-![[Pasted image 20230610195616.png]]
 
 ### On Linux and Windows:
 
@@ -59,7 +58,7 @@ rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz
 3. Install [Docker](https://docs.docker.com/engine/install/ubuntu/#installation-methods)
 	1. If you have installed Docker Desktop, Enable Kubernetes by going into Settings > Kubernetes.
 	2. If you have not installed Docker Desktop, Install [minikube](https://minikube.sigs.k8s.io/docs/start/). 
-		1. Configure Minikube: ```
+		1. Configure Minikube: 
 
 ```bash
 minikube start --driver=docker --kubernetes-version=v1.23.3 --cpus=4 --memory=14G --disk-size=10G --namespace=wormhole
