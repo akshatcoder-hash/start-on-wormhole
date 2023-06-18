@@ -1,0 +1,44 @@
+---
+title: "Bridging in Action"
+description: "Working with out bridge"
+---
+
+Now that we have created our own bridge, it's time to play around and bridge some tokens from one chain to other.
+
+## Bridging in Action
+
+To bridge assets between chains, you need to connect both the wallets. Let's take an example of bridging MATIC from Polygon Mumbai to Solana Devnet.
+
+### Getting some faucet
+
+To play around with bridges, we need to get some fake coins (aka faucet). To get faucet for Polygon Mumbai network, head over to https://faucet.polygon.technology/
+and paste your wallet address. You will get around 0.2 MATIC and that's enough for our exercise.
+
+![matic-faucet](https://i.ibb.co/T2pq2td/image.png)
+
+## Choosing assets
+
+Now, head over to our bridge and connect your Metamask or any EVM Wallet and select MATIC as the asset to be bridged.
+
+![bridge-matic](https://i.ibb.co/C1DWSSn/image.png)
+
+Going further, select Solana in the network and connect your Phantom or any other Solana wallet.
+
+![network-sol](https://i.ibb.co/R7kvM4d/image.png)
+
+You may receive a message that no token account exists for wrapped MATIC on Solana. So, we will need to create a token account for that and it will encounter a minimal gas fees. 
+
+After that, select the amount of MATIC you want to convert. I will go with 1 USD to get 1 USD in form of wrapped MATIC (WMATIC) on Solana.
+
+![get-wsol](https://i.ibb.co/MkvV920/image.png)
+
+Now, approve the transaction and depending on the network speed, it will wait for confirmations from source network, wormhole network and the destination network as well.
+After getting the confirmations, you will be able to claim the tokens on your destination network.
+
+![at-the-bridge](https://i.ibb.co/nPLQD6p/image.png)
+
+The claiming process will require you to sign multiple transactions and after that, you will be able to see wrapped MATIC in your wallet:
+
+![claim-wsol](https://i.ibb.co/Q9DRGHN/image.png)
+
+Now, let's see how you can customise your bridge ranging from colors to tokens and networks.
