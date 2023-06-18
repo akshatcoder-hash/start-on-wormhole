@@ -1,0 +1,77 @@
+---
+title: "Integrating Wormhole Connect"
+description: "Start with the Bridge"
+---
+
+
+Now, we have a basic React App started, the only thing now left is to integrate the magic of Wormhole Connect SDK to get started with bridging tokens. 
+
+
+## Initialising Wormhole Connect SDK
+
+Let's get started by initialising the Wormhole Connect SDK in our **Bridge** app directory.
+
+Now, in your app directory, install the Wormhole Connect SDK by running 
+
+```bash
+npm i @wormhole-foundation/wormhole-connect
+```
+
+![integrate-1](https://i.ibb.co/wwGpzqX/image.png)
+
+## Creating the Bridge
+
+To create a very basic token bridge, head over to `src/App.tsx` and remove everything.
+
+### Importing the SDK
+
+First, let's import the Wormhole Connect SDK into our React App. For that, just add this line at the top:
+
+```tsx
+import WormholeBridge from "@wormhole-foundation/wormhole-connect";
+```
+
+
+### Creating the App Function
+
+After we have imported the SDK, we need to create a function that returns the imported bridge element. For that, add 
+
+```tsx
+function App() {
+  return (
+    <WormholeBridge />
+  );
+}
+```
+
+just below the imports.
+
+### Final Steps: Exporting the Function
+
+To get the contents of the `App` function on our webpage, we need to export it. Let's do that at the end of the code as well:
+
+```tsx
+export default App;
+```
+
+If you have been following through, your code may look like this:
+
+```tsx
+import WormholeBridge from '@wormhole-foundation/wormhole-connect';
+
+function App() {
+  return (
+    <WormholeBridge />
+  );
+}
+
+export default App;
+```
+
+Save the file and your http://localhost:3000/ will show an output like this:
+
+![integrate-2](https://i.ibb.co/2qwbbY3/image.png)
+
+Wuhoooo!! You have created your own token bridge using the power of Wormhole.Now feel free to go here and there and bridge some tokens and get some wrapped assets over your favourite network.
+
+You can also view the code on the GitHub [here](https://github.com/akshatcoder-hash/wh-bridge.git).
