@@ -67,6 +67,9 @@ export default defineConfig({
             {
               label: "Initializing the Project", link: "/automatic-relayers/init",
             },
+            {
+              label: "Cross Chain Contract", link: "/automatic-relayers/contract",
+            },
           ],
         },
       ],
