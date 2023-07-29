@@ -1,0 +1,162 @@
+---
+title: "Writing Cross-Chain Contract"
+description: "Writing Cross-Chain Contract"
+---
+
+Go to https://github.com/akshatcoder-hash/x-mail and create a repository using this template.
+
+Clone the repository and set up the starter code in your workspace:
+
+```sh
+git clone git@github.com:<your username>/x-mail.git
+cd x-mail/
+npm i
+```
+
+![[Pasted image 20230725012445.png]]
+
+We have already written up the tests and deploy scripts for you. In this tutorial, we will go through how you can write a cross-chain contract.
+
+Let's write the contract first and then we'll see what happens behind the scenes.
+
+**Step 1:** Go to the `src` directory and create a new file named `HelloWormhole.sol`.
+
+Here's the initial structure of the contract:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.13;
+
+contract HelloWormhole {
+    constructor() {
+        // We'll add some code here soon
+    }
+}
+
+```
+
+A couple notes on this:
+
+- `// SPDX-License-Identifier: UNLICENSED`: This is a special comment known as a "SPDX license identifier". You can look it up for more details.
+
+- `pragma solidity ^0.8.13;`: This specifies the version of the Solidity compiler we want our contract to use. It essentially means "I only want to use version 0.8.13 of the Solidity compiler, nothing lower".
+
+**Step 2**: Now let's import the Wormhole SDK interfaces. These are necessary for our contract to interact with Wormhole bridge.
+
+```solidity
+import "wormhole-solidity-sdk/interfaces/IWormholeRelayer.sol";
+import "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
+```
+
+**Step 3**: Implement the `IWormholeReceiver` interface in our `HelloWormhole` contract:
+
+```solidity
+contract HelloWormhole is IWormholeReceiver {
+    // More to come
+}
+```
+
+**Step 4**: Next, let's add the constructor. This will run once when the contract is deployed. It sets the address of the Wormhole relayer:
+
+```solidity
+constructor(address _wormholeRelayer) {
+    wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
+}
+```
+
+**Step 5**: Let's define the `quoteCrossChainGreeting` function. This function will quote the cost of sending a message to a given chain:
+
+```soliddity 
+function quoteCrossChainGreeting(uint16 targetChain) public view returns (uint256 cost) {
+    (cost,) = wormholeRelayer.quoteEVMDeliveryPrice(targetChain, 0, GAS_LIMIT);
+}
+```
+
+This function calls the `quoteEVMDeliveryPrice` method of our Wormhole relayer and returns the cost.
+
+```solidity
+function sendCrossChainGreeting(uint16 targetChain, address targetAddress, string memory greeting) public payable {
+    uint256 cost = quoteCrossChainGreeting(targetChain);
+    require(msg.value == cost);
+    wormholeRelayer.sendPayloadToEvm{value: cost}(
+        targetChain,
+        targetAddress,
+        abi.encode(greeting, msg.sender), // payload
+        0, // no receiver value needed since we're just passing a message
+        GAS_LIMIT
+    );
+}
+```
+
+This function first gets the cost of sending the message, then checks if the sender has sent enough ETH to cover the cost. If they have, it sends the message through the Wormhole relayer.
+
+**Step 8**: Lastly, we'll implement the `receiveWormholeMessages` function which is required by the `IWormholeReceiver` interface:
+
+```solidity
+function receiveWormholeMessages(
+    bytes memory payload,
+    bytes[] memory, // additionalVaas
+    bytes32, // address that called 'sendPayloadToEvm' (HelloWormhole contract address)
+    uint16 sourceChain,
+    bytes32 // deliveryHash - this can be stored in a mapping deliveryHash => bool to prevent duplicate deliveries
+) public payable override {
+    require(msg.sender == address(wormholeRelayer), "Only relayer allowed");
+    (string memory greeting, address sender) = abi.decode(payload, (string, address));
+    latestGreeting = greeting;
+    emit GreetingReceived(latestGreeting, sourceChain, sender);
+}
+```
+
+Summing up, here's how your final code would look like:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import "wormhole-solidity-sdk/interfaces/IWormholeRelayer.sol";
+import "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
+
+contract HelloWormhole is IWormholeReceiver {
+    event GreetingReceived(string greeting, uint16 senderChain, address sender);
+
+    uint256 constant GAS_LIMIT = 50_000;
+
+    IWormholeRelayer public immutable wormholeRelayer;
+
+    string public latestGreeting;
+
+    constructor(address _wormholeRelayer) {
+        wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
+    }
+
+    function quoteCrossChainGreeting(uint16 targetChain) public view returns (uint256 cost) {
+        (cost,) = wormholeRelayer.quoteEVMDeliveryPrice(targetChain, 0, GAS_LIMIT);
+    }
+
+    function sendCrossChainGreeting(uint16 targetChain, address targetAddress, string memory greeting) public payable {
+        uint256 cost = quoteCrossChainGreeting(targetChain);
+        require(msg.value == cost);
+        wormholeRelayer.sendPayloadToEvm{value: cost}(
+            targetChain,
+            targetAddress,
+            abi.encode(greeting, msg.sender), // payload
+            0, // no receiver value needed since we're just passing a message
+            GAS_LIMIT
+        );
+    }
+
+    function receiveWormholeMessages(
+        bytes memory payload,
+        bytes[] memory, // additionalVaas
+        bytes32, // address that called 'sendPayloadToEvm' (HelloWormhole contract address)
+        uint16 sourceChain,
+        bytes32 // deliveryHash - this can be stored in a mapping deliveryHash => bool to prevent duplicate deliveries
+    ) public payable override {
+        require(msg.sender == address(wormholeRelayer), "Only relayer allowed");
+        (string memory greeting, address sender) = abi.decode(payload, (string, address));
+        latestGreeting = greeting;
+        emit GreetingReceived(latestGreeting, sourceChain, sender);
+    }
+}
+```
