@@ -70,6 +70,9 @@ export default defineConfig({
             {
               label: "Cross Chain Contract", link: "/automatic-relayers/contract",
             },
+            {
+              label: "Deploying the contract", link: "/automatic-relayers/deploy",
+            },
           ],
         },
       ],
