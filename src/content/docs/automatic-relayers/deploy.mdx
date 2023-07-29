@@ -1,0 +1,39 @@
+---
+title: "Deploying the Cross-Chain contract"
+description: "Making the message go cross chain"
+---
+
+
+![[Pasted image 20230726023849.png]]
+
+After preparing our smart contract, it's time to put it to work by transmitting our greetings across chains. In order to avoid dealing with real assets while experimenting, we will use a testnet, a parallel network used for testing purposes. The testnet provides us with faucet tokens, which can be used freely without worrying about real-world value.
+
+Our journey across chains is made possible by Wormhole, which offers support for several testnets. However, it's essential to note that the Automatic Relayer service is designed to work exclusively with EVM (Ethereum Virtual Machine) Chains at this stage. Here are some of the testnets that Wormhole supports:
+
+
+|Chain Name|Wormhole Chain ID|Network ID|Address|Faucets|
+|---|---|---|---|---|
+|Binance Smart Chain|4|97|0x80aC94316391752A193C1c47E27D382b507c93F3|[BSC Faucet](https://testnet.bnbchain.org/faucet-smart)|
+|Polygon (Mumbai)|5|80001|0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0|[Polygon Faucet](https://faucet.polygon.technology/mumbai)|
+|Avalanche (Fuji)|6|43113|0xA3cF45939bD6260bcFe3D66bc73d60f19e49a8BB|[Avalanche Faucet](https://faucet.avax-test.network/)|
+|Celo|14|44787|0x306B68267Deb7c5DfCDa3619E22E9Ca39C374f84|[Celo Faucet](https://faucet.celo-testnet.org/)|
+|Moonbase|16|1287|0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0|[Moonbase Faucet](https://faucet.moonbeam.network/)|
+|Base|30|84531|0xea8029CD7FCAEFFcD1F53686430Db0Fc8ed384E1|[Base Faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)|
+
+
+In this setup, we have pre-configured the Celo and Avalanche Fuji testnets in the given GitHub repository. This does not, however, limit your choices. You have the freedom to change the chains as per your requirements. To switch chains, you need to make modifications in the `/ts-scripts/testnet/config.json` file (for deployment purposes) and in the `lib/wormhole-solidity-sdk/src/testing/WormholeRelayerTest.sol` file (for testing purposes).
+
+Once we have our wallet prepared using ganache and the private key added to the PATH variable, our next step involves securing some testnet faucets. Links to these faucets are provided in the table above.
+
+After securing your testnet faucets, you can initiate your test run by executing the command:
+
+```bash
+EVM_PRIVATE_KEY=${PRIVATE_KEY} npm run test
+```
+
+
+![[Pasted image 20230729042119.png]]
+
+Upon successful completion, you'll have transmitted a greeting from the Avalanche Fuji testnet to the Celo testnet! You are free to modify the respective chains from the table above based on your specific needs.
+
+Do note that the greeting text is treated as an off-chain component in this setup. If you want to change the greeting message, you can simply modify the `arbitraryGreeting` value located in the `ts-scripts/hello_wormhole.test.ts` file.
