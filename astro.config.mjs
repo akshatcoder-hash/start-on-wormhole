@@ -73,6 +73,9 @@ export default defineConfig({
             {
               label: "Deploying the contract", link: "/automatic-relayers/deploy",
             },
+            {
+              label: "Behind the Scenes", link: "/automatic-relayers/behind-the-scenes",
+            }
           ],
         },
       ],
