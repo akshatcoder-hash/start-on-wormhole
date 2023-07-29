@@ -1,0 +1,16 @@
+---
+title: "Behind the Scenes"
+description: "Working of automatic relayers"
+---
+
+Let's get into Behind the scenes of how the greeting gets transferred from the source chain to the target chain:
+
+1. **Instruction and Payment Delivery:** A user invokes HelloWormhole's `sendCrossChainGreeting` function which triggers Wormhole Relayer contract's `sendPayloadToEvm` function. This publishes the delivery instructions to the blockchain logs and pays the default delivery provider.
+    
+2. **Signature Collection:** Guardians, who monitor wormhole-connected blockchains, sign the delivery instructions, creating a Verifiable Action Approval (VAA). Once 13 out of 19 guardians sign the VAA, it's considered fully signed.
+    
+3. **Instruction Parsing:** The Delivery Provider watches for its assigned VAAs, parses the delivery instructions off-chain, and calls the `deliver` endpoint on the Wormhole Relayer contract on the target chain.
+    
+4. **VAA Verification and Payload Transfer:** The Wormhole Relayer contract verifies the signatures of the delivery VAA, parses the delivery instructions, and calls the `receiveWormholeMessages` endpoint of the target address with the payload.
+    
+5. **Message Processing:** The HelloWormhole contract on the target chain then processes the received message, completing the cross-chain greeting transfer.
