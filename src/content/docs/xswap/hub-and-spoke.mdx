@@ -1,0 +1,46 @@
+---
+title: "Hub and Spoke Model: An Overview"
+description: "An overview of the Hub and Spoke model for cross chain borrow lend applications."
+---
+
+While designing DeFi applications, we can employ two primary architectures:
+1. The Point to Point model
+2. The Hub and Spoke model
+
+We will be using the Hub and Spoke model to design our cross chain borrow lend application, but first let's get an overview of both the models.
+
+#### **Understanding the Point-to-Point Model**
+
+In a point-to-point model:
+
+- **Uniformity Across Chains**: Every chain in the system remains identical in function. This means that each chain can operate independently, without relying on a centralized entity or hub.
+- **Direct Accounting**: This model allows for direct accounting between any pair of chains. There's no need for an intermediary or central hub to facilitate these interactions.
+- **Native Assets**: Assets remain on their native chains. This means there's no need for wrapping or converting assets into a different form to facilitate cross-chain interactions.
+- **Wormhole Messages**: The system uses Wormhole messages to facilitate only accounting between chains. These messages serve as the primary means of communication between different chains, ensuring that all chains remain synchronized in terms of their accounting.
+
+A schematic for this type of design can be seen below:
+
+![point-to-point](https://i.ibb.co/N6TZJdn/image.png)
+
+#### **Challenges with the Point-to-Point Model**
+
+While the point-to-point model offers simplicity and direct interactions between chains, it presents challenges:
+
+- **Dynamic Interest Rates**: With assets and accounting spread across multiple chains, calculating and synchronizing dynamic interest rates can become complex.
+- **Asynchronicity Issues**: Without a central hub to synchronize state updates, there's potential for asynchronicity issues, especially when Wormhole messages aren't redeemed immediately.
+- **Fragmented Liquidity**: Liquidity can become fragmented across multiple chains, potentially leading to inefficiencies and reduced user experience.
+
+#### **Exploring the Hub Model**
+
+In the hub-and-spoke paradigm, the hub emerges as the central entity, either functioning as a centralized accounting or liquidity layer. Different spoke chains interact with the hub, sending either accounting messages or wrapped token transfers upon token movements. The hub becomes the authoritative source of state information, with any state stored on spokes reflecting the hub's ground truth.
+
+The hub model offers several advantages over the point-to-point design:
+- **Atomic State Updates**: All accounting is done on a single blockchain, ensuring atomic updates.
+- **Centralized Liquidity**: The hub model centralizes liquidity, enhancing the user experience.
+
+
+**Workflow of Protocol Operations**:
+
+1. **Registering the Spoke**: The first step involves registering all spoke contracts on the hub. This registration allows deposits into a spoke contract, which are then communicated to the hub.
+2. **Depositing Collateral**: Users deposit assets from various chains into the centralized hub.
+3. **Borrowing and Repayment**: Users borrow against their collateral on various chains and subsequently repay their loans.
