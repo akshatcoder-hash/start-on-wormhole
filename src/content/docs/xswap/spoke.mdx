@@ -1,0 +1,28 @@
+---
+title: "The Spoke Model in Cross Chain Borrow Lend Applications"
+description: ""
+---
+
+### **Introduction to the Spoke Model in DeFi**
+
+In the world of Decentralized Finance (DeFi), there's a growing need to connect different blockchains in a way that's efficient and user-friendly. This is where the spoke model comes into play, acting as a bridge that links various blockchains to a central hub. This article dives deep into the workings of the spoke model, especially in the context of borrowing and lending across chains.
+
+### **Understanding the Spoke's Role**
+
+Think of the hub-and-spoke system as a city's transportation network. The hub is the main station, and the spokes are routes connecting different parts of the city to this station. In DeFi, the hub is our main center of operations, while the spokes can be different apps, contracts, or even other blockchains. These spokes have their own operations but also communicate with the hub for specific tasks or information.
+
+### **Operational Flow of the Spoke Model**
+
+1. **Setting Up the Spoke**: Before anything can happen, we need to add or "register" the spoke contracts to the hub. This ensures that any activity on a spoke, like deposits, is recognized by the hub. Currently, to maintain security, only the owner of the hub can add a new spoke. However, this might evolve to include more community-driven decisions in the future.
+2. **Depositing Collateral**: Users can deposit assets, such as cryptocurrency, into the main hub from various blockchains. For instance, someone might want to deposit Ethereum-based assets and, in exchange, borrow assets from a blockchain like Solana. This interaction is facilitated by the hub, which acts as the central point of accounting and management.
+3. **Borrowing and Repayment**: Once assets are deposited, users can take loans based on their deposits across different blockchains. Later, they can repay these loans as per the terms.
+
+### **The Point-to-Point Model and Its Challenges**
+
+The point-to-point model, at first glance, seems like a direct way to connect two blockchains. However, it comes with its set of challenges. One of the main issues is managing changing interest rates. As users deposit or withdraw assets, interest rates can fluctuate. This dynamic nature can create complications, especially when trying to keep everything synchronized across multiple blockchains. Moreover, if certain messages (like Wormhole's VAAs) aren't processed immediately, it can lead to further discrepancies.
+
+### **Advantages of a Centralized System Over Point-to-Point**
+
+Rather than just sending accounting messages between blockchains, it's often more efficient to use a system where tokens are "wrapped" or "packaged" between the depositing and withdrawing chains. In this setup, all borrowing and lending activities are channeled through one primary hub chain. This hub maintains a record of all transactions, ensuring a streamlined and efficient process for all connected blockchains.
+
+Now that we've explored the spoke model in detail, in our next discussion, we'll delve into the hub model, the central pillar that orchestrates the entire system. 
