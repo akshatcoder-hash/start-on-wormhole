@@ -1,0 +1,57 @@
+---
+title: "Initialising the Project"
+description: "Setting up the Environment"
+---
+
+## Setting Up Foundry
+
+Welcome to the world of Ethereum application development with Foundry! Foundry is a powerful, lightning-fast EVM Development toolkit written in Rust. Follow these steps to get started:
+
+Open your terminal and execute the following command:
+
+```sh
+curl -L https://foundry.paradigm.xyz | bash
+```
+![Foundry Installation](https://i.ibb.co/HBrLM5s/image.png)
+
+Run 
+
+```sh
+forge --help
+```
+in the terminal to verify the installation and you'll get an output similar to this:
+
+![Forge Help](https://i.ibb.co/cYXQ3ZW/image.png)
+
+## Installing Ganache
+
+Ganache is your go-to tool for launching a personal EVM-powered blockchain on your local system. It's designed for testing purposes to simulate the Ethereum network environment. Let's get Ganache up and running:
+
+1. Visit the [Official Ganache Website](https://trufflesuite.com/ganache/) and get the installer file.
+2. Simply run the downloaded file and follow the installation wizard to complete the installation process.
+3. Just spin up a new Ethereum workspace on your local system using the Quickstart option. This will be used to deploy and test the contracts.
+
+![Ganache Quickstart](https://i.ibb.co/hHkjj1N/image.png)
+
+4. Ganache will provide you with a set of testing wallets and private keys, running locally on [http://127.0.0.1:7545](http://127.0.0.1:7545/).
+
+![Ganache Accounts](https://i.ibb.co/8cksfVd/image.png)
+
+Now that your development environment is all set, let's dive into writing smart contracts and making it go cross-chain.
+
+Now, get the Private Key of any of the accounts from Ganache and save it as a PATH variable. This will help make our lives easier while deploying the contract.
+
+![Ganache Private Key](https://i.ibb.co/dJKWTmJ/image.png)
+
+Into the terminal of the x-mail directory, type
+
+```bash
+export PRIVATE_KEY='Your Private Key'
+```
+
+Now, you can access your private key from the terminal using the echo command. Just type in
+```sh
+echo $PRIVATE_KEY
+```
+
+and it will display the same key we had copied.
