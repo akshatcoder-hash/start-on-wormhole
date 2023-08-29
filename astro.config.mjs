@@ -81,7 +81,7 @@ export default defineConfig({
         {
           label: "Cross Chain Borrow Lend Protocol",
           items: [
-            { label: "Introduction", link: "/xswap/intro" },
+            { label: "Introduction", link: "/xswap/xswap-intro" },
             {
               label: "Initializing the Project", link: "/xswap/init",
             },
@@ -89,7 +89,7 @@ export default defineConfig({
               label: "An Overview of Hub and Spoke Model", link: "/xswap/hub-and-spoke",
             },
             {
-              label: "A Deep Dive into the Spoke", link: "/xswwap/spoke",
+              label: "A Deep Dive into the Spoke", link: "/xswap/spoke",
             },
             {
               label: "A Deep Dive into the Hub", link: "/xswap/hub",
