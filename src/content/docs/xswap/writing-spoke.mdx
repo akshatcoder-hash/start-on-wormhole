@@ -1,0 +1,240 @@
+---
+title: "Implementing the Spoke Model"
+description: "Writing the contract to implement the Spoke model"
+---
+
+First, head over to [this GitHub template](https://github.com/akshatcoder-hash/xSwap) and create a new repository using it.
+
+Clone the repository and set up the starter code in your workspace:
+
+```sh
+git clone git@github.com:<your username>/xSwap.git
+cd xSwap/
+npm i
+```
+
+We've already set up deploy scripts and tests for you. 🤓 So let's jump straight into implementing the Spoke model with a smart contract!
+
+We'll start with creating a contract named `Spoke.sol` in the `src/` directory. 📁
+
+**Step 1**: First things first, let's get started by specifying the licenses and our usual imports:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+import "wormhole-solidity-sdk/WormholeRelayerSDK.sol";
+```
+
+Just like in our [Cross Chain Mailbox](https://startonwormhole.vercel.app/automatic-relayers/intro/) tutorial, we're importing the `wormhole-solidity-sdk` for those nifty cross-chain operations.
+
+**Step 2**: Now, let's declare the Spoke contract:
+
+```solidity
+contract Spoke is TokenSender, TokenReceiver {
+```
+
+Here, our contract is named `Spoke` and it inherits from `TokenSender` and `TokenReceiver`.
+This is in sync with our discussion on the spoke's role in sending and receiving tokens between different blockchains connected to a central hub.  🌐 
+
+**Step 3:** Let's define the gas limits and some actions: 
+
+```solidity
+uint256 constant GAS_LIMIT = 250_000;
+
+uint256 constant GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS = 300_000;
+
+enum Action {DEPOSIT, WITHDRAW, BORROW, REPAY}
+```
+
+- `GAS_LIMIT` and `GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS` are constants for gas limits. The latter is a bit higher because, you know, return requests need more gas! ⛽
+
+- `Action` is an enum that lists all the cool things you can do like depositing or borrowing assets. This is straight out of the "Operational Flow of the Spoke Model" section of the spoke model. 📚
+
+```solidity
+uint16 hubChain;
+address hubAddress;
+```
+
+These variables are like the contract's GPS 📍. They tell it which hub to talk to, just like the article says.
+
+**Step 4:** Now, initializing the contract:
+
+```solidity
+constructor(uint16 _hubChain, address _hubAddress, address _wormholeRelayer, address _tokenBridge, address _wormhole)
+   TokenBase(_wormholeRelayer, _tokenBridge, _wormhole)
+{
+  hubChain = _hubChain;
+  hubAddress = _hubAddress;
+}
+```
+
+This constructor is like the contract's birth certificate. 🍼 It sets up all the essential details.
+
+**Step 5:** The `quoteDeposit()` function:
+
+```solidity
+function quoteDeposit() public view returns (uint256 cost) {
+uint256 deliveryCost;
+(deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(hubChain, 0, GAS_LIMIT);
+cost = deliveryCost + wormhole.messageFee();
+}
+```
+
+**What It Does:** This function tells you how much it'll cost to deposit assets from the spoke to the hub. 💰
+
+**How It Works:**
+- It calls the `quoteEVMDeliveryPrice` method from `wormholeRelayer` to get the delivery cost of sending a deposit to the hub chain. It uses the constant `GAS_LIMIT` as the gas limit for this operation.
+- It then adds the `messageFee` from the `wormhole` to the delivery cost to get the total cost of the deposit.
+ 
+**Relation to Article:** This is like the "Depositing Collateral" part in the article. 📖
+
+**Step 6:** Now, the `quoteBorrow()` function:
+
+```solidity
+function quoteBorrow(uint256 receiverValueForReturnDelivery) public view returns (uint256 cost) {
+(cost,) = wormholeRelayer.quoteEVMDeliveryPrice(hubChain, receiverValueForReturnDelivery, GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS);
+}
+```
+
+**What It Does:**  
+
+This function gives you an estimate for borrowing assets. 🤑
+
+**How It Works:**
+
+- It calls the `quoteEVMDeliveryPrice` method from `wormholeRelayer` to get the delivery cost of borrowing assets. It uses the constant `GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS` as the gas limit for this operation.
+
+**Relation to Article:**  
+
+This is straight from the "Borrowing and Repayment" section in the article. 📚
+
+**Step 7:** The `quoteRepay()` function:
+
+```solidity
+function quoteRepay() public view returns (uint256 cost) {
+uint256 deliveryCost;
+(deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(hubChain, 0, GAS_LIMIT);
+cost = deliveryCost + wormhole.messageFee();
+}
+```
+
+**What It Does:**  
+
+This function tells you how much you'll need to repay your borrowed assets. 💸
+
+**How It Works:**
+
+- It calls the `quoteEVMDeliveryPrice` method from `wormholeRelayer` to get the delivery cost of repaying borrowed assets. It uses the constant `GAS_LIMIT` as the gas limit for this operation.
+- It then adds the `messageFee` from the `wormhole` to the delivery cost to get the total cost of the repayment.
+
+**Relation to Article:**  
+
+This is all about repaying loans, just like in the article. 📖
+
+**Step 8:** The final, quoteWithdraw() function:
+
+```solidity
+function quoteWithdraw(uint256 receiverValueForReturnDelivery) public view returns (uint256 cost) {
+(cost,) = wormholeRelayer.quoteEVMDeliveryPrice(hubChain, receiverValueForReturnDelivery, GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS);
+}
+```
+
+**What It Does:**  
+
+This function estimates the cost for withdrawing assets back to the spoke. 🏦
+
+**How It Works:**
+
+- It calls the `quoteEVMDeliveryPrice` method from `wormholeRelayer` to get the delivery cost of withdrawing assets. It uses the constant `GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS` as the gas limit for this operation.
+
+**Relation to Article:**  
+
+This is directly related to the "Operational Flow of the Spoke Model" section in the article. 📚
+
+**Step 9:** Now, we've done with our quoting functions, add this just below that:
+
+```solidity
+function deposit(address tokenAddress, uint256 amount) public payable {
+
+IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+sendTokenWithPayloadToEvm(hubChain, hubAddress, abi.encode(Action.DEPOSIT, msg.sender), 0, GAS_LIMIT, tokenAddress, amount);
+
+}
+```
+
+This function allows users to deposit assets into the hub, which is a key operation discussed in the "Operational Flow of the Spoke Model" section of the article. It transfers the specified amount of tokens from the sender to the contract and then sends it to the hub.
+
+
+**Step 10:** Now we are done with depositing assets, let's add a function to withdraw them:
+
+```solidity
+function withdraw(address tokenAddress, uint256 amount, uint256 receiverValueForReturnDelivery) public payable {
+
+wormholeRelayer.sendPayloadToEvm{value: msg.value}(hubChain, hubAddress, abi.encode(Action.WITHDRAW, msg.sender, tokenAddress, amount), receiverValueForReturnDelivery, GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS);
+
+}
+```
+
+This function lets you take your assets back. It's like the "Withdrawal" part in the article. 📖
+
+
+**Step 11:** Another DeFi operation will be to let users borrow the assets:
+
+```solidity
+function borrow(address tokenAddress, uint256 amount, uint256 receiverValueForReturnDelivery) public payable {
+
+wormholeRelayer.sendPayloadToEvm{value: msg.value}(hubChain, hubAddress, abi.encode(Action.BORROW, msg.sender, tokenAddress, amount), receiverValueForReturnDelivery, GAS_LIMIT_FOR_WITHDRAWS_AND_BORROWS);
+
+}
+```
+
+This function allows users to borrow assets based on their deposits. It sends a payload to the EVM of the hub chain to initiate the borrowing.
+
+Not much left after this, a wagmi for you if you are sticking till here.
+
+**Step 12:** Let's get the repayment from users:
+
+```solidity
+function repay(address tokenAddress, uint256 amount) public payable {
+
+IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+
+sendTokenWithPayloadToEvm(hubChain, hubAddress, abi.encode(Action.REPAY, msg.sender), 0, GAS_LIMIT, tokenAddress, amount);
+
+}
+```
+
+This function enables users to repay their borrowed assets. It transfers the tokens from the user to the contract and then sends them to the hub for repayment.
+
+**Step 13:** Now finally, to handle incoming payloads and tokens:
+
+```solidity
+function receivePayloadAndTokens(
+
+bytes memory payload,
+TokenReceived[] memory receivedTokens,
+bytes32 sourceAddress,
+uint16 sourceChain,
+bytes32 deliveryHash
+) internal override onlyWormholeRelayer isRegisteredSender(sourceChain, sourceAddress) replayProtect(deliveryHash) 
+{
+require(receivedTokens.length == 1, "Expecting one transfer");
+TokenReceived memory receivedToken = receivedTokens[0];
+(address user) = abi.decode(payload, (address));
+IERC20(receivedToken.tokenAddress).transfer(user, receivedToken.amount);
+
+// send any refund back to the user
+user.call{value: msg.value}("");
+}
+```
+
+This function handles incoming tokens and payloads. 📬
+
+**How It Works:**
+
+- Checks that only one token transfer is happening.
+- Decodes the payload to find out who should get the tokens.
+- Transfers the tokens to the user.
+
+
+**Step 14:** Finally, don't forget to close the contract with a `}`. 🎉
