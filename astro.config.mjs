@@ -92,8 +92,11 @@ export default defineConfig({
               label: "A Deep Dive into the Spoke", link: "/xswap/spoke",
             },
             {
+              label: "Implementing the Spoke model", link: "/xswap/writing-spoke",
+            },
+            {
               label: "A Deep Dive into the Hub", link: "/xswap/hub",
-            }
+            },
           ],
         }
       ],
