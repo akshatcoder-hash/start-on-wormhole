@@ -98,6 +98,9 @@ export default defineConfig({
               label: "A Deep Dive into the Hub", link: "/xswap/hub",
             },
             {
+              label: "Implementing the Hub mode", link: "/xswap/writing-hub",
+            },
+            {
               label: "Working of the Model", link: "/xswap/working",
             },
           ],
