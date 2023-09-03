@@ -53,6 +53,14 @@ import "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
 
 ```solidity
 contract HelloWormhole is IWormholeReceiver {
+    event GreetingReceived(string greeting, uint16 senderChain, address sender);
+
+    uint256 constant GAS_LIMIT = 50_000;
+
+    IWormholeRelayer public immutable wormholeRelayer;
+
+    string public latestGreeting;
+
     // More to come
 }
 ```
