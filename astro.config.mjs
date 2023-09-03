@@ -97,6 +97,9 @@ export default defineConfig({
             {
               label: "A Deep Dive into the Hub", link: "/xswap/hub",
             },
+            {
+              label: "Working of the Model", link: "/xswap/working",
+            },
           ],
         }
       ],
