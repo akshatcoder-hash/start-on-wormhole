@@ -53,6 +53,14 @@ import "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
 
 ```solidity
 contract HelloWormhole is IWormholeReceiver {
+    event GreetingReceived(string greeting, uint16 senderChain, address sender);
+
+    uint256 constant GAS_LIMIT = 50_000;
+
+    IWormholeRelayer public immutable wormholeRelayer;
+
+    string public latestGreeting;
+
     // More to come
 }
 ```
@@ -60,8 +68,6 @@ contract HelloWormhole is IWormholeReceiver {
 **Step 4**: Next, let's add the constructor. This will run once when the contract is deployed. It sets the address of the Wormhole relayer:
 
 ```solidity
-IWormholeRelayer public immutable wormholeRelayer;
-
 constructor(address _wormholeRelayer) {
     wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
 }
