@@ -1,10 +1,7 @@
----
-title: "Implementing the Hub Model"
-description: "Writing the contract to implement the Spoke model"
----
-
 
 Hub is the place where assets are deposited, borrowed, and repaid. 
+
+## Writing the Hub Contract
 
 🛠️ **Step 1- Create Your Contract File:** 🛠️
 
@@ -141,3 +138,45 @@ This function is like the hub's personal assistant, updating records and making 
 
 **Step 9- Close the Contract 🎉** You've made it to the end! Don't forget to close the contract with a `}`. 🎉
 
+## Launching the Hub Contract 🚀
+
+Alright, the coding marathon is over! Now let's get this beauty off the ground and into the blockchain universe:
+
+**Step 1 - Choose Your Networks 🌐:**  
+Wormhole is compatible with multiple blockchains, so go ahead and pick your top two. Once you've made your choice, head over to the `ts-scripts/testnet/config.json` file and update it. Don't forget to grab some faucet tokens for your selected networks! 💦
+
+
+|Chain Name|Wormhole Chain ID|Network ID|Address|Faucets|
+|---|---|---|---|---|
+|Binance Smart Chain|4|97|0x80aC94316391752A193C1c47E27D382b507c93F3|[BSC Faucet](https://testnet.bnbchain.org/faucet-smart)|
+|Polygon (Mumbai)|5|80001|0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0|[Polygon Faucet](https://faucet.polygon.technology/mumbai)|
+|Avalanche (Fuji)|6|43113|0xA3cF45939bD6260bcFe3D66bc73d60f19e49a8BB|[Avalanche Faucet](https://faucet.avax-test.network/)|
+|Celo|14|44787|0x306B68267Deb7c5DfCDa3619E22E9Ca39C374f84|[Celo Faucet](https://faucet.celo-testnet.org/)|
+|Moonbase|16|1287|0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0|[Moonbase Faucet](https://faucet.moonbeam.network/)|
+|Base|30|84531|0xea8029CD7FCAEFFcD1F53686430Db0Fc8ed384E1|[Base Faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)|
+
+
+
+**Step 2 - Build the Code 🏗️:**  
+Once you've set up your networks and secured some faucet tokens, it's time to build your code. Open your terminal and run:
+
+bashCopy code
+
+`npm run build`
+
+This command will use Foundry to compile your code.
+
+**Step 3 - Test Run 🧪:**  
+With your testnet faucets in place, you're all set for a test run. To kick things off, execute the following command in your terminal:
+
+bashCopy code
+
+`EVM_PRIVATE_KEY=${PRIVATE_KEY} npm run test`
+
+**Step 4 - Check the Output 📜:**  
+If all has gone according to plan, you'll see an output indicating that your mock tokens have been deployed. This will be followed by Wormhole's [attestation and transfer process](https://startonwormhole.vercel.app/introduction/bridging/).
+
+
+![output](https://i.ibb.co/wz922Ny/image.png)
+
+And voila! 🎉 You've now successfully crafted two contracts that lay the foundation for building a cross-chain borrow-lend application. 🌉💰 Onward to decentralized financial innovation! 🚀🌟
