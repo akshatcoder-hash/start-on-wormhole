@@ -1,26 +1,26 @@
 ---
-title: "Working of the Model"
+title: "Working of the Hub and Spoke Model"
 description: "How does the cross-chain borrow-lend model work?"
 ---
 
 
-### 🤔 How Does the Cross-Chain Borrow-Lend Model Work? 🤔
+## 🤔 How Does the Cross-Chain Borrow-Lend Model Work? 🤔
 
 Alright, you've got your contracts set up for the Hub and Spoke. Now, let's unravel the magic behind this model! 🎩✨
 
-#### 🛠️ The Starting Point 🛠️
+### 🛠️ The Starting Point 🛠️
 
 Picture this: You're a user who wants to do something pretty cool. You want to deposit Ethereum (ETH) into an Ethereum-based spoke and borrow Solana (SOL) from a Solana-based spoke. The hub, which lives on its own blockchain (let's call it Chain X), is the mastermind behind all this. It's the glue that keeps this cross-chain world running smoothly. 🌍
 
-#### 💰 Making the Initial Deposit 💰
+### 💰 Making the Initial Deposit 💰
 
 So, your first mission is to deposit your ETH into the Ethereum spoke. But this isn't just any deposit; it's the key to unlocking your ability to borrow from another blockchain. 🗝️ Once you've made the deposit, a Wormhole message is auto-magically 🪄 created and zipped over to the hub. This message tells the hub, "Hey, we've got a new deposit over here!" 📬 The hub then updates its ledger and checks to make sure you're good to go for a loan based on the collateral you've provided. 📊👌
 
-#### 🌟 Time to Borrow Some SOL! 🌟
+### 🌟 Time to Borrow Some SOL! 🌟
 
 Alright, you've got your ETH collateral all set up. Now you're ready to borrow some SOL from the Solana spoke. But wait, how does the hub make sure you don't go overboard and borrow more than you should? 🤔 That's where the hub's genius accounting skills come in. 🧮 It crunches the numbers, looking at how much ETH you've deposited and what SOL is currently worth in the market. Only after doing this math does it give the green light for your borrowing adventure, keeping the system safe and balanced. 🚦💡
 
-#### 📈 Let's Talk Interest Rates 📈
+### 📈 Let's Talk Interest Rates 📈
 
 Interest rates are the heartbeat of any borrow-lend model. In our case, the hub is the maestro conducting this financial symphony. 🎶 It uses a special formula to figure out the interest rates for both your deposited ETH and borrowed SOL:
 
@@ -28,7 +28,7 @@ Interest rates are the heartbeat of any borrow-lend model. In our case, the hub 
 
 This formula makes sure that the interest rate dances to the tune of the total liquidity in the system, keeping everything fair and balanced. 🎵🤝
 
-#### 🔄 Time to Pay Back and What If...? 🔄
+### 🔄 Time to Pay Back and What If...? 🔄
 
 Paying back is just as important as borrowing. You can return the borrowed SOL whenever you feel like it. But what if things go south and you can't pay back on time? 😱 That's when the hub steps in with its liquidation process. This isn't just a "click and you're done" thing; it involves some serious number-crunching. 🧮
 
