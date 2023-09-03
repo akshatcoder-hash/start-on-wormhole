@@ -60,6 +60,8 @@ contract HelloWormhole is IWormholeReceiver {
 **Step 4**: Next, let's add the constructor. This will run once when the contract is deployed. It sets the address of the Wormhole relayer:
 
 ```solidity
+IWormholeRelayer public immutable wormholeRelayer;
+
 constructor(address _wormholeRelayer) {
     wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
 }
