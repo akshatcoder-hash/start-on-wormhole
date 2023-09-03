@@ -3,44 +3,59 @@ title: "Hub and Spoke Model: An Overview"
 description: "An overview of the Hub and Spoke model for cross chain borrow lend applications."
 ---
 
-While designing DeFi applications, we can employ two primary architectures:
-1. The Point to Point model
-2. The Hub and Spoke model
 
-We will be using the Hub and Spoke model to design our cross chain borrow lend application, but first let's get an overview of both the models.
+When it comes to crafting DeFi apps, you've got two main blueprints to choose from: 📐
 
-#### **Understanding the Point-to-Point Model**
+1. **The Point-to-Point Model** 🔄
+2. **The Hub and Spoke Model** 🎡
 
-In a point-to-point model:
+For our cross-chain borrow-lend app, we're going with the Hub and Spoke model. But before we dive into that, let's get a quick rundown of both! 🏃‍♀️
 
-- **Uniformity Across Chains**: Every chain in the system remains identical in function. This means that each chain can operate independently, without relying on a centralized entity or hub.
-- **Direct Accounting**: This model allows for direct accounting between any pair of chains. There's no need for an intermediary or central hub to facilitate these interactions.
-- **Native Assets**: Assets remain on their native chains. This means there's no need for wrapping or converting assets into a different form to facilitate cross-chain interactions.
-- **Wormhole Messages**: The system uses Wormhole messages to facilitate only accounting between chains. These messages serve as the primary means of communication between different chains, ensuring that all chains remain synchronized in terms of their accounting.
+#### 🎯 **Understanding the Point-to-Point Model** 🎯
 
-A schematic for this type of design can be seen below:
+In the Point-to-Point universe, here's what you need to know:
 
-![point-to-point](https://i.ibb.co/N6TZJdn/image.png)
+- **Chain Autonomy 🌐**: Every chain is its own boss! They all have the same functions and can operate solo, without needing a central hub to hold their hand. 🤲
 
-#### **Challenges with the Point-to-Point Model**
+- **Peer-to-Peer Accounting 📊**: No middleman needed here! Chains can directly keep tabs on each other's transactions. It's like having a direct chat instead of a group conversation. 🗨️
 
-While the point-to-point model offers simplicity and direct interactions between chains, it presents challenges:
+- **Home is Where the Asset Is 🏠**: Your assets stay put on their native chains. No need to wrap them up or change their form to interact with other chains. 🛒
 
-- **Dynamic Interest Rates**: With assets and accounting spread across multiple chains, calculating and synchronizing dynamic interest rates can become complex.
-- **Asynchronicity Issues**: Without a central hub to synchronize state updates, there's potential for asynchronicity issues, especially when Wormhole messages aren't redeemed immediately.
-- **Fragmented Liquidity**: Liquidity can become fragmented across multiple chains, potentially leading to inefficiencies and reduced user experience.
-
-#### **Exploring the Hub Model**
-
-In the hub-and-spoke paradigm, the hub emerges as the central entity, either functioning as a centralized accounting or liquidity layer. Different spoke chains interact with the hub, sending either accounting messages or wrapped token transfers upon token movements. The hub becomes the authoritative source of state information, with any state stored on spokes reflecting the hub's ground truth.
-
-The hub model offers several advantages over the point-to-point design:
-- **Atomic State Updates**: All accounting is done on a single blockchain, ensuring atomic updates.
-- **Centralized Liquidity**: The hub model centralizes liquidity, enhancing the user experience.
+- **Wormhole Chit-Chat 🪐**: The system uses Wormhole messages as the main line of communication between chains. These messages keep everyone on the same page, making sure the accounting across chains is in sync. 🔄
 
 
-**Workflow of Protocol Operations**:
+And there you have it! Below is a schematic to help you visualize this design: 📊
 
-1. **Registering the Spoke**: The first step involves registering all spoke contracts on the hub. This registration allows deposits into a spoke contract, which are then communicated to the hub.
-2. **Depositing Collateral**: Users deposit assets from various chains into the centralized hub.
-3. **Borrowing and Repayment**: Users borrow against their collateral on various chains and subsequently repay their loans.
+![[Pasted image 20230827172102.png]]
+
+#### 🤔 **Challenges with the Point-to-Point Model** 🤔
+
+The point-to-point model sounds great, but it's not all sunshine and rainbows. 🌦️ Here are some hurdles you might face:
+
+- **Rollercoaster Interest Rates 🎢**: When you've got assets and accounting all over the place, keeping track of ever-changing interest rates can get tricky.
+
+- **Timing Troubles ⏱️**: Without a central hub to keep things in sync, you might run into timing issues, especially if Wormhole messages aren't processed right away.
+
+- **Scattered Liquidity 💦**: Your liquidity could end up like puzzle pieces scattered across multiple chains, making things less efficient and user-friendly.
+
+
+#### 🎡 **Exploring the Hub Model** 🎡
+
+Switching gears, let's talk about the hub-and-spoke model. Here, the hub is the star of the show, acting as the central accounting or liquidity manager. 🌟
+
+Different spokes (think of them as mini-chains or apps) chat with the hub, sending either accounting updates or wrapped tokens when there's movement. 📨
+
+Why go for the hub model? Well, it's got some perks:
+
+- **One-Stop Accounting 📚**: All the number-crunching happens on one blockchain, making updates seamless.
+
+- **Liquidity Central 🏦**: By pooling all the liquidity in one place, the hub model makes for a smoother user experience.
+
+
+#### 🛠️ **Workflow of Protocol Operations** 🛠️
+
+1. **Meet & Greet the Spoke 🤝**: First off, you've got to introduce your spoke contracts to the hub. This is like getting a VIP pass that lets you deposit assets into the spoke, which the hub then acknowledges.
+
+2. **The Deposit Dance 💃**: Users can deposit assets from different chains into the hub, making it the go-to place for all things financial.
+
+3. **Borrow & Payback Time ⏳**: Once you've got your assets in the hub, you can borrow from various chains. And of course, what you borrow, you must return!
