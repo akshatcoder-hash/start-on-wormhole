@@ -2,3 +2,142 @@
 title: "Implementing the Hub Model"
 description: "Writing the contract to implement the Spoke model"
 ---
+
+
+Hub is the place where assets are deposited, borrowed, and repaid. 
+
+🛠️ **Step 1- Create Your Contract File:** 🛠️
+
+First things first! Create a new file named `Hub.sol` in your `src/` directory. This is where all the action happens!
+
+**Step 2**: Kick things off by adding the license and the libraries you'll need. Paste the following code:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+import "wormhole-solidity-sdk/WormholeRelayerSDK.sol";
+```
+
+Remember our [Cross Chain Mailbox](https://startonwormhole.vercel.app/automatic-relayers/intro/) tutorial? Yep, we're using `wormhole-solidity-sdk` again for those awesome cross-chain features! 🌉
+
+
+**Step 3- Declare the Hub Contract: 🎨** Time to declare our Hub contract! 🎉 Add this code snippet:
+
+```solidity
+contract Hub is TokenSender, TokenReceiver {
+   uint256 constant GAS_LIMIT = 250_000;
+   enum Action {DEPOSIT, WITHDRAW, BORROW, REPAY}
+```
+
+Here, our `Hub` contract inherits from `TokenSender` and `TokenReceiver`. This aligns perfectly with the article's point about the hub being the central point for all token transactions. 🔄
+
+**Step 4 - Map Out Deposits and Borrows: 🗺️** 
+Let's create some mappings to keep tabs on user deposits and borrows. 🗺️
+
+```solidity
+   mapping(address => mapping(address => uint256)) public vaultDeposits;
+   mapping(address => mapping(address => uint256)) public vaultBorrows;
+```
+
+This is like the hub's own little ledger, keeping track of all the assets. 📚
+
+
+**Step 5 - Initialize the Contract: 🏗️** 
+Now, let's set up the constructor to initialize our contract. 🛠️
+
+```solidity
+   constructor(address _wormholeRelayer, address _tokenBridge, address _wormhole)
+   TokenBase(_wormholeRelayer, _tokenBridge, _wormhole)
+   {}
+```
+
+**Step 6- Quoting Function: 📊** 
+Add a function that estimates the cost of returning assets to a spoke. This is like the hub's own calculator! 🧮.
+
+```solidity
+function quoteReturnDelivery(uint16 spokeChain) public view returns (uint256 cost) 
+{
+uint256 deliveryCost;
+
+(deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(spokeChain, 0, GAS_LIMIT);
+cost = deliveryCost + wormhole.messageFee();
+}
+```
+
+**Step 7- The Heart of the Hub: 🎛️** 
+This function is the control center of the Hub. It's a bit long, but it's where the magic happens! 🌟
+
+```solidity
+function receivePayloadAndTokens(
+    bytes memory payload,
+    TokenReceived[] memory receivedTokens,
+    bytes32 sourceAddress,
+    uint16 sourceChain,
+    bytes32 deliveryHash
+) 
+internal override onlyWormholeRelayer isRegisteredSender(sourceChain, sourceAddress) replayProtect(deliveryHash) 
+{
+    if (receivedTokens.length == 0) {
+        (Action action, address user, address tokenHomeAddress, uint256 amount) = abi.decode(payload, (Action, address, address, uint256));
+        address tokenAddressOnThisChain = getTokenAddressOnThisChain(sourceChain, toWormholeFormat(tokenHomeAddress));
+
+        if (action == Action.BORROW || action == Action.WITHDRAW) {
+            if (updateHubState(action, user, tokenAddressOnThisChain, amount)) {
+                sendTokenToUser(user, sourceChain, sourceAddress, tokenAddressOnThisChain, amount);
+            }
+        }
+    } else if (receivedTokens.length == 1) {
+        TokenReceived memory receivedToken = receivedTokens[0];
+        (Action action, address user) = abi.decode(payload, (Action, address));
+
+        if (action == Action.DEPOSIT || action == Action.REPAY) {
+            updateHubState(action, user, receivedToken.tokenAddress, receivedToken.amount);
+        }
+    }
+}
+
+```
+
+This function is like the Swiss Army knife of our Hub contract. It handles deposits, withdrawals, borrows, and repayments. It's the real MVP, aligning with everything the article talks about. 🏆
+
+
+**Step 8- Update the Hub State: 🔄** 
+Now, let's add a function that updates the state of the Hub based on user actions. 🔄
+
+```solidity
+function updateHubState(Action action, address user, address wrappedTokenAddress, uint256 amount) 
+internal returns (bool success) 
+{
+    uint256 currentHubBalance = IERC20(wrappedTokenAddress).balanceOf(address(this));
+
+    if (action == Action.DEPOSIT) {
+        vaultDeposits[user][wrappedTokenAddress] += amount;
+
+    } else if (action == Action.WITHDRAW) {
+        if (vaultDeposits[user][wrappedTokenAddress] < amount) return false;
+        if (currentHubBalance < amount) return false;
+        vaultDeposits[user][wrappedTokenAddress] -= amount;
+
+    } else if (action == Action.BORROW) {
+        if (currentHubBalance < amount) return false;
+        vaultBorrows[user][wrappedTokenAddress] += amount;
+
+    } else if (action == Action.REPAY) {
+        if (vaultBorrows[user][wrappedTokenAddress] < amount) {
+            vaultDeposits[user][wrappedTokenAddress] += amount - vaultBorrows[user][wrappedTokenAddress];
+            vaultBorrows[user][wrappedTokenAddress] = 0;
+        } else {
+            vaultBorrows[user][wrappedTokenAddress] -= amount;
+        }
+    }
+
+    return true;
+}
+```
+
+This function is like the hub's personal assistant, updating records and making sure everything is in tip-top shape! 📋
+
+
+
+**Step 9- Close the Contract 🎉** You've made it to the end! Don't forget to close the contract with a `}`. 🎉
+
