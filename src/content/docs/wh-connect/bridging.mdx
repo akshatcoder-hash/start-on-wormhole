@@ -3,42 +3,45 @@ title: "Bridging in Action"
 description: "Working with out bridge"
 ---
 
-Now that we have created our own bridge, it's time to play around and bridge some tokens from one chain to other.
+Alright, now that we've built our own bridge, it's time to take it for a spin and move some tokens between chains! 🌉🎉
 
-## Bridging in Action
+## 🎮 Bridging Tokens: Let's Do This! 🎮
 
-To bridge assets between chains, you need to connect both the wallets. Let's take an example of bridging MATIC from Polygon Mumbai to Solana Devnet.
+To get started, you'll need to link up wallets from both chains. For this example, we'll be moving MATIC from Polygon Mumbai to Solana Devnet. 🔄
 
-### Getting some faucet
+## 💧 Grabbing Some Faucet 💧
 
-To play around with bridges, we need to get some fake coins (aka faucet). To get faucet for Polygon Mumbai network, head over to https://faucet.polygon.technology/
-and paste your wallet address. You will get around 0.2 MATIC and that's enough for our exercise.
+First things first, we need some play money, also known as "faucet." Head over to [Polygon's Faucet](https://faucet.polygon.technology/) and paste in your wallet address. You'll receive around 0.2 MATIC, which is plenty for our little experiment. 🤑
+
 
 ![matic-faucet](https://i.ibb.co/T2pq2td/image.png)
 
-## Choosing assets
+## 🎯 Picking Your Assets 🎯
 
-Now, head over to our bridge and connect your Metamask or any EVM Wallet and select MATIC as the asset to be bridged.
+Next, navigate to our bridge and connect your Metamask or any EVM-compatible wallet. Choose MATIC as the asset you want to bridge. 🌉
 
 ![bridge-matic](https://i.ibb.co/C1DWSSn/image.png)
 
-Going further, select Solana in the network and connect your Phantom or any other Solana wallet.
+Now, switch over to the Solana network and connect your Phantom or another Solana wallet. 🌐
 
 ![network-sol](https://i.ibb.co/R7kvM4d/image.png)
 
-You may receive a message that no token account exists for wrapped MATIC on Solana. So, we will need to create a token account for that and it will encounter a minimal gas fees. 
+You might see a message saying there's no token account for wrapped MATIC on Solana. No worries! You'll just need to create a token account, which will cost a tiny bit in gas fees. ⛽
 
-After that, select the amount of MATIC you want to convert. I will go with 1 USD to get 1 USD in form of wrapped MATIC (WMATIC) on Solana.
+After that's sorted, decide how much MATIC you want to move. For this example, I'll go with 1 USD, which will convert to 1 USD worth of wrapped MATIC (WMATIC) on Solana. 💵
 
 ![get-wsol](https://i.ibb.co/MkvV920/image.png)
 
-Now, approve the transaction and depending on the network speed, it will wait for confirmations from source network, wormhole network and the destination network as well.
-After getting the confirmations, you will be able to claim the tokens on your destination network.
+## 🚀 Approve and Claim 🚀
+
+Hit "Approve" on the transaction. Depending on network speed, you'll wait for confirmations from the source network, the Wormhole network, and finally the destination network. 🕒
 
 ![at-the-bridge](https://i.ibb.co/nPLQD6p/image.png)
 
-The claiming process will require you to sign multiple transactions and after that, you will be able to see wrapped MATIC in your wallet:
+Once you get the green light, you can claim your tokens on the destination network. This will involve signing a few transactions. 🖋️
 
 ![claim-wsol](https://i.ibb.co/Q9DRGHN/image.png)
 
-Now, let's see how you can customise your bridge ranging from colors to tokens and networks.
+And voila! You'll see your shiny new wrapped MATIC in your wallet! 🌟
+
+Now, let's explore how you can jazz up your bridge, from changing colors to adding new tokens and networks. 🎨🛠️
