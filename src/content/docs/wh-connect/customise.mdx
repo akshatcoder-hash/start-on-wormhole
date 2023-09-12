@@ -3,9 +3,9 @@ title: "Customising the Bridge"
 description: "Change Bridge Configuration"
 ---
 
-Wormhole Connect also offers a lot of customisation options out of the box! You can control which networks to bridge to or from which networks the bridge can accept tokens. 
+Wormhole Connect isn't just powerful; it's also incredibly flexible! You can tailor it to your specific needs, choosing which networks to connect and which tokens to accept. 🛠️🌈
 
-Here's an example of a bridge only on Ethereum, Solana and Polygon that accepts only ETH, wETH, MATIC and wMATIC:
+Here's a sample configuration that sets up a bridge exclusively for Ethereum, Solana, and Polygon, and only accepts ETH, wETH, MATIC, and wMATIC:
 
 ```tsx
 import WormholeBridge, { WormholeConnectConfig } from '@wormhole-foundation/wormhole-connect';
@@ -30,10 +30,10 @@ export default App;
 ```
 
 
-Now, this will give the output as 
+After implementing this, your output will be displayed as 
 
-![bridge-congig](https://i.ibb.co/cDzFK1P/image.png)
+![bridge-config](https://i.ibb.co/cDzFK1P/image.png)
 
-Similarly, you can change the config to change the supported networks as per your requirements.
+Feel free to tweak the `config` object to include other networks or tokens as per your project's needs. 🔄🎛️
 
-That's it for now, from the next section, we will dive into some solidity code and will bridge messages over different chains.
+That wraps up this section! Coming up next, we'll delve into some Solidity code and explore how to bridge messages across various blockchains. 🌉📝
