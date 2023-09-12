@@ -4,14 +4,13 @@ description: "Start with the Bridge"
 ---
 
 
-Now, we have a basic React App started, the only thing now left is to integrate the magic of Wormhole Connect SDK to get started with bridging tokens. 
+Alright, you've got a basic React App up and running. Now it's time to sprinkle in some Wormhole Connect SDK magic to kickstart your token bridging journey. 🌉✨
 
+## 🌟 Initializing Wormhole Connect SDK 🌟
 
-## Initialising Wormhole Connect SDK
+First things first, let's initialize the Wormhole Connect SDK within our **Bridge** app directory.
 
-Let's get started by initialising the Wormhole Connect SDK in our **Bridge** app directory.
-
-Now, in your app directory, install the Wormhole Connect SDK by running 
+In your app's root directory, go ahead and install the Wormhole Connect SDK with the following command:
 
 ```bash
 npm i @wormhole-foundation/wormhole-connect
@@ -19,22 +18,22 @@ npm i @wormhole-foundation/wormhole-connect
 
 ![integrate-1](https://i.ibb.co/wwGpzqX/image.png)
 
-## Creating the Bridge
+## 🛠️ Crafting the Bridge 🛠️
 
-To create a very basic token bridge, head over to `src/App.tsx` and remove everything.
+Now, navigate to your `src/App.tsx` file and clear out its contents.
 
-### Importing the SDK
+### 📦 Importing the SDK 📦
 
-First, let's import the Wormhole Connect SDK into our React App. For that, just add this line at the top:
+Start by importing the Wormhole Connect SDK into your React App. Simply add this line at the top of your file:
 
 ```tsx
 import WormholeBridge from "@wormhole-foundation/wormhole-connect";
 ```
 
 
-### Creating the App Function
+### 🎨 Building the App Function 🎨
 
-After we have imported the SDK, we need to create a function that returns the imported bridge element. For that, add 
+Once the SDK is imported, let's create a function that renders the bridge element we just imported. Add the following code snippet: 
 
 ```tsx
 function App() {
@@ -44,17 +43,17 @@ function App() {
 }
 ```
 
-just below the imports.
+This should go right below your import statements.
 
-### Final Steps: Exporting the Function
+### 🏁 The Final Lap: Exporting the Function 🏁
 
-To get the contents of the `App` function on our webpage, we need to export it. Let's do that at the end of the code as well:
+To render the `App` function on your webpage, you'll need to export it. Add this line at the end of your code:
 
 ```tsx
 export default App;
 ```
 
-If you have been following through, your code may look like this:
+If you've been following along, your code should look something like this:
 
 ```tsx
 import WormholeBridge from '@wormhole-foundation/wormhole-connect';
@@ -68,10 +67,10 @@ function App() {
 export default App;
 ```
 
-Save the file and your http://localhost:3000/ will show an output like this:
+Save your changes, and your local server at [http://localhost:3000/](http://localhost:3000/) should display something like this:
 
 ![integrate-2](https://i.ibb.co/2qwbbY3/image.png)
 
-Wuhoooo!! You have created your own token bridge using the power of Wormhole.Now feel free to go here and there and bridge some tokens and get some wrapped assets over your favourite network.
+🎉 Woohoo! You've successfully built your very own token bridge, all thanks to the power of Wormhole. Feel free to bridge tokens and acquire wrapped assets on your network of choice.
 
-You can also view the code on the GitHub [here](https://github.com/akshatcoder-hash/wh-bridge.git).
+For those interested, the code is also available on GitHub [right here](https://github.com/akshatcoder-hash/wh-bridge.git). 🌐
