@@ -1,0 +1,215 @@
+---
+title: "Writing the Contract"
+description: "Making the token go cross chain"
+---
+
+
+First, head over to [this GitHub template](https://github.com/akshatcoder-hash/xToken) and create a new repository using it.
+
+Clone the repository and set up the starter code in your workspace:
+
+```sh
+git clone git@github.com:<your username>/xToken.git
+cd xToken/
+npm i
+```
+
+Don't worry about the deployment scripts and tests; we've got you covered. 🎉 Now, let's get to the fun part—bridging tokens!
+
+**Step 1**: Setting Up the Basics 📝
+
+Kick things off by declaring the license and importing the necessary libraries:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+import "wormhole-solidity-sdk/WormholeRelayerSDK.sol";
+```
+
+Just like in our [Cross Chain Mailbox tutorial](https://startonwormhole.vercel.app/automatic-relayers/intro/), we're using the `wormhole-solidity-sdk` for seamless cross-chain functionality.
+
+**Step 2**: Crafting the Function Signature 🛠️
+
+Now, let's define the function that will handle the cross-chain deposit quotes:
+
+```solidity
+   function quoteCrossChainDeposit(uint16 targetChain) public view returns (uint256 cost) {
+// Function Body
+ }
+```
+
+
+This function is public and read-only, meaning it won't alter the blockchain's state. It accepts a `uint16` parameter, `targetChain`, and returns a `uint256` variable named `cost`.
+
+**Step 3**: Introducing Local Variables 📦
+
+```solidity
+uint256 deliveryCost;
+```
+
+Within the function, go ahead and declare a local variable named `deliveryCost` of type `uint256`. This variable will store the expense associated with transferring the token and payload to the designated chain.
+
+**Step 4**: Fetch the Delivery Cost 📬
+
+```solidity
+(deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(targetChain, 0, GAS_LIMIT);
+```
+
+
+Utilize the `quoteEVMDeliveryPrice` method from the `wormholeRelayer` object to fetch the delivery cost. This function requires three arguments: `targetChain`, `0`, and `GAS_LIMIT`. The result will be stored in `deliveryCost`.
+
+**Step 5**: Crunching the Numbers for Total Cost 🧮
+
+Now, let's compute the total cost of the cross-chain deposit by summing up `deliveryCost` and `wormhole.messageFee()`.
+
+```solidity
+function quoteCrossChainDeposit(uint16 targetChain) public view returns (uint256 cost) {
+  uint256 deliveryCost;
+   (deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(targetChain, 0, GAS_LIMIT);
+   cost = deliveryCost + wormhole.messageFee();
+}
+```
+
+**Step 6**: Function Signature and Cost Calculation 🖋️
+
+Begin by setting the function signature to `public payable` and outline its parameters. Then, invoke the `quoteCrossChainDeposit` function to obtain the total cost for the cross-chain deposit.
+
+```solidity
+function sendCrossChainDeposit(
+    uint16 targetChain,
+    address targetHelloToken,
+    address recipient,
+    uint256 amount,
+    address token
+) public payable {
+    uint256 cost = quoteCrossChainDeposit(targetChain);
+}
+```
+
+Use the `require` statement to confirm that the Ether sent (`msg.value`) aligns with the quoted cost. This validation ensures that the user has dispatched the accurate amount of Ether to cover the transaction fees.
+
+```solidity
+require(msg.value == cost, "msg.value must be quoteCrossChainDeposit(targetChain)");
+```
+
+**Step 7**: Token Transfer and Payload Encoding 🔄
+
+```solidity
+IERC20(token).transferFrom(msg.sender, address(this), amount);
+```
+
+Leverage the `transferFrom` function from the `IERC20` interface to move tokens from the sender to this contract. Next, encode the `recipient` address into bytes using `abi.encode`.
+
+```solidity
+bytes memory payload = abi.encode(recipient);
+```
+
+**Step 8**: Sending Tokens and Payload to Target Chain 🚀
+
+```solidity
+sendTokenWithPayloadToEvm(
+   targetChain, 
+   targetHelloToken,
+   payload, 
+   0,
+   GAS_LIMIT, 
+   token,
+  amount
+);
+```
+
+Utilize the `sendTokenWithPayloadToEvm` function to dispatch the token and payload to the destination chain. Pass in all the necessary parameters like `targetChain`, `targetHelloToken`, `payload`, `0` for receiver value, `GAS_LIMIT`, `token`, and `amount`.
+
+**Step 9**: Internal Function with Security Measures 🛡️
+
+```solidity
+function receivePayloadAndTokens(
+   bytes memory payload,
+   TokenReceived[] memory receivedTokens,
+   bytes32, // sourceAddress
+   uint16,  // sourceChain
+   bytes32  // deliveryHash
+) internal override onlyWormholeRelayer {
+   require(receivedTokens.length == 1, "Expected 1 token transfers");
+   }
+```
+
+Declare the function as `internal` and `override`, and specify its parameters. Add the `onlyWormholeRelayer` modifier to make sure that only the Wormhole Relayer can invoke this function. Use a `require` statement to validate that only a single token transfer occurs in the `receivedTokens` array.
+
+**Step 10**: Decoding Payload and Final Transfer 📦
+
+```solidity
+address recipient = abi.decode(payload, (address));
+```
+
+Decode the `payload` to retrieve the `recipient` address using `abi.decode`. Then, execute the `transfer` function from the `IERC20` interface to send the received token to the designated recipient.
+
+```solidity
+IERC20(receivedTokens[0].tokenAddress).transfer(recipient, receivedTokens[0].amount);
+```
+
+And finally close your contract with a `}`.
+
+If everything's been good so far, here's what your final code should look like:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import "wormhole-solidity-sdk/WormholeRelayerSDK.sol";
+
+contract HelloToken is TokenSender, TokenReceiver {
+    uint256 constant GAS_LIMIT = 250_000;
+
+    constructor(address _wormholeRelayer, address _tokenBridge, address _wormhole)
+        TokenBase(_wormholeRelayer, _tokenBridge, _wormhole)
+    {}
+
+    function quoteCrossChainDeposit(uint16 targetChain) public view returns (uint256 cost) {
+        // Cost of delivering token and payload to targetChain
+        uint256 deliveryCost;
+        (deliveryCost,) = wormholeRelayer.quoteEVMDeliveryPrice(targetChain, 0, GAS_LIMIT);
+
+        // Total cost: delivery cost + cost of publishing the 'sending token' wormhole message
+        cost = deliveryCost + wormhole.messageFee();
+    }
+
+    function sendCrossChainDeposit(
+        uint16 targetChain,
+        address targetHelloToken,
+        address recipient,
+        uint256 amount,
+        address token
+    ) public payable {
+        uint256 cost = quoteCrossChainDeposit(targetChain);
+        require(msg.value == cost, "msg.value must be quoteCrossChainDeposit(targetChain)");
+
+        IERC20(token).transferFrom(msg.sender, address(this), amount);
+
+        bytes memory payload = abi.encode(recipient);
+        sendTokenWithPayloadToEvm(
+            targetChain, 
+            targetHelloToken, // address (on targetChain) to send token and payload to
+            payload, 
+            0, // receiver value
+            GAS_LIMIT, 
+            token, // address of IERC20 token contract
+            amount
+        );
+    }
+
+    function receivePayloadAndTokens(
+        bytes memory payload,
+        TokenReceived[] memory receivedTokens,
+        bytes32, // sourceAddress
+        uint16,
+        bytes32 // deliveryHash
+    ) internal override onlyWormholeRelayer {
+        require(receivedTokens.length == 1, "Expected 1 token transfers");
+
+        address recipient = abi.decode(payload, (address));
+
+        IERC20(receivedTokens[0].tokenAddress).transfer(recipient, receivedTokens[0].amount);
+    }
+}
+```
