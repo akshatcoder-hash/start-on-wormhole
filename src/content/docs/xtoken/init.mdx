@@ -1,0 +1,65 @@
+---
+title: "Initialising the Project"
+description: "Setting up the Environment"
+---
+
+## 🚀 Setting Up Foundry 🚀
+
+Hey there, future Ethereum developer! 🌟 Ready to dive into the world of smart contracts and dApps? Foundry is your trusty sidekick—a super-fast EVM Development toolkit coded in Rust. Here's how to get it up and running:
+
+1️⃣ **Fire Up Your Terminal**: Open your terminal and run this magic spell 🧙‍♂️:
+
+```sh
+curl -L https://foundry.paradigm.xyz | bash
+```
+![Foundry Installation](https://i.ibb.co/HBrLM5s/image.png)
+
+2️⃣ **Check Your Work**: To make sure Foundry is installed correctly, type:
+
+```sh
+forge --help
+```
+You should see some helpful text pop up. 📜
+
+![Forge Help](https://i.ibb.co/cYXQ3ZW/image.png)
+
+## 🛠️ Installing Ganache 🛠️
+
+Ganache is like your personal sandbox for Ethereum. 🏖️ It's a local blockchain simulator that lets you test out your smart contracts in a safe environment. Here's how to set it up:
+
+1️⃣ **Download Time**: Head over to the [Official Ganache Website](https://trufflesuite.com/ganache/) and grab the installer.
+
+2️⃣ **Install It**: Run the installer and follow the steps. It's as easy as pie! 🥧
+
+3️⃣ **Quickstart Your Blockchain**: Once installed, create a new Ethereum workspace using the Quickstart option. This will be your testing ground. 🌱
+
+
+![Ganache Quickstart](https://i.ibb.co/hHkjj1N/image.png)
+
+4️⃣ **Your Testing Wallets**: Ganache will give you some test wallets and private keys. You can access them at [http://127.0.0.1:7545](http://127.0.0.1:7545/).
+
+
+![Ganache Accounts](https://i.ibb.co/8cksfVd/image.png)
+
+## 📝 Time to Code! 📝
+
+With your dev environment ready, it's time to write some smart contracts and take them cross-chain! 🌉
+
+🔑 **Save Your Private Key**: Grab a private key from one of your Ganache accounts and save it as a PATH variable. This will make deploying contracts a breeze.
+
+
+![Ganache Private Key](https://i.ibb.co/dJKWTmJ/image.png)
+
+Into the terminal of the x-mail directory, type
+
+```bash
+export PRIVATE_KEY='Your Private Key'
+```
+
+🔍 **Verify Your Key**: To double-check, you can display your saved private key with:
+
+```sh
+echo $PRIVATE_KEY
+```
+
+And voila! You're all set to start your Ethereum development journey! 🎉
