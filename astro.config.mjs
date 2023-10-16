@@ -79,6 +79,24 @@ export default defineConfig({
           ],
         },
         {
+          label: "Cross Chain Token Swap",
+          items: [
+            { label: "Introduction", link: "/xtoken/intro" },
+            {
+              label: "Diving into Special Relayers", link: "/xtoken/special-relayers",
+            },
+            {
+              label: "Initializing the Project", link: "/xtoken/init",
+            },
+            {
+              label: "Writing the contract", link: "/xtoken/contract",
+            },
+            {
+              label: "Deploying the contract", link: "/automatic-relayers/deploy",
+            }
+          ],
+        },
+        {
           label: "Cross Chain Borrow Lend Protocol",
           items: [
             { label: "Introduction", link: "/xswap/xswap-intro" },
