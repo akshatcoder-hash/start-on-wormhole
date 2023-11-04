@@ -1,0 +1,145 @@
+---
+title: "Writing the Cross-Chain USDC Contract"
+description: "Writing CCTP Contract"
+---
+
+First, head over to [this GitHub template](https://github.com/akshatcoder-hash/xUSDC) and create a new repository using it.
+
+Clone the repository and set up the starter code in your workspace:
+
+```sh
+git clone git@github.com:<your username>/xUSDC.git
+cd xSwap/
+npm i
+```
+
+We've already set up deploy scripts and tests for you. 🤓 So let's jump straight into implementing the Spoke model with a smart contract!
+
+**Step 1**: First things first, let's get started by specifying the licenses and our usual imports:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import "wormhole-solidity-sdk/WormholeRelayerSDK.sol";
+import "wormhole-solidity-sdk/interfaces/IERC20.sol";
+```
+
+Just like in our [Cross Chain Mailbox](https://startonwormhole.vercel.app/automatic-relayers/intro/) tutorial, we're importing the `wormhole-solidity-sdk`for those nifty cross-chain operations.
+
+**Step 2:** Construct the Contract
+
+Next up, we'll build out the structure of the `HelloUSDC` contract:
+
+```solidity
+contract HelloUSDC is CCTPSender, CCTPReceiver {
+```
+
+Inheriting from `CCTPSender` and `CCTPReceiver` gives us superpowers for sending and receiving USDC across chains. 💥
+
+**Step 3:** Initialize the Contract
+Now we can set up constants and initialize things in the constructor:
+
+```solidity
+    uint256 constant GAS_LIMIT = 250_000;
+
+    constructor(
+        address _wormholeRelayer,
+        address _wormhole,
+        address _circleMessageTransmitter,
+        address _circleTokenMessenger,
+        address _USDC
+    )
+        CCTPBase(
+            _wormholeRelayer,
+            _wormhole,
+            _circleMessageTransmitter,
+            _circleTokenMessenger,
+            _USDC
+        )
+    {
+        setCCTPDomain(2, 0);
+        setCCTPDomain(6, 1);
+        setCCTPDomain(24, 2);
+        setCCTPDomain(23, 3);
+        setCCTPDomain(30, 6);
+    }
+```
+
+This lays the groundwork for our contract's cross-chain abilities.
+
+**Step 4:** Estimate Deposit Costs
+
+Let's add a function to quote deposit costs:
+
+```solidity
+    function quoteCrossChainDeposit(
+        uint16 targetChain
+    ) public view returns (uint256 cost) {
+        // Cost of delivering token and payload to targetChain
+        (cost, ) = wormholeRelayer.quoteEVMDeliveryPrice(
+            targetChain,
+            0,
+            GAS_LIMIT
+        );
+    }
+```
+
+This will allow users to check pricing before sending USDC.
+
+
+**Step 5:** Initiate Deposits
+
+Next up, a function to handle the actual deposit:
+
+```solidity
+    function sendCrossChainDeposit(
+        uint16 targetChain,
+        address targetHelloUSDC,
+        address recipient,
+        uint256 amount
+    ) public payable {
+        uint256 cost = quoteCrossChainDeposit(targetChain);
+        require(
+            msg.value == cost,
+            "msg.value must be quoteCrossChainDeposit(targetChain)"
+        );
+
+        IERC20(USDC).transferFrom(msg.sender, address(this), amount);
+
+        bytes memory payload = abi.encode(recipient);
+        sendUSDCWithPayloadToEvm(
+            targetChain,
+            targetHelloUSDC, // address (on targetChain) to send token and payload to
+            payload,
+            0, // receiver value
+            GAS_LIMIT,
+            amount
+        );
+    }
+```
+
+This will burn USDC on the source chain and kick off the cross-chain transfer. 🌉
+
+**Step 6:** Receive the Assets
+
+Finally, logic to receive the USDC and payload:
+
+```solidity
+    function receivePayloadAndUSDC(
+        bytes memory payload,
+        uint256 amountUSDCReceived,
+        bytes32, // sourceAddress
+        uint16, // sourceChain
+        bytes32 // deliveryHash
+    ) internal override onlyWormholeRelayer {
+        address recipient = abi.decode(payload, (address));
+
+        IERC20(USDC).transfer(recipient, amountUSDCReceived);
+    }
+```
+
+**Step 7:** Finally, don't forget to close the contract with a `}`.
+
+And there we have it - a contract to send USDC across blockchains! 🎉
+
