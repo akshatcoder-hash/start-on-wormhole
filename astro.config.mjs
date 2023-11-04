@@ -97,6 +97,20 @@ export default defineConfig({
           ],
         },
         {
+          label: "Making USDC go Cross Chain",
+          items: [
+            { label: "Circle's CCTP", link: "/xusdc/cctp" },
+            {
+              label: "Setting up the environment",
+              link: "/xusdc/init",
+            },
+            {
+              label: "Writing the contract",
+              link: "/xusdc/contract",
+            },
+          ],
+        },
+        {
           label: "Cross Chain Borrow Lend Protocol",
           items: [
             { label: "Introduction", link: "/xswap/xswap-intro" },
